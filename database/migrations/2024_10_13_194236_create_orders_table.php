@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('orderDate');
-            $table->string('status');
-            $table->string('shippingAddress');
-            $table->string('billingAddress')->nullable();
-            $table->string('shippingMethod');
+            $table->decimal('total', 10, 2); // Le total avant la réduction
+            $table->decimal('discount', 10, 2)->default(0); // Champ pour la réduction globale de la commande
+            $table->enum('status', ['pending', 'completed', 'canceled'])->default('pending');
             $table->timestamps();
         });
+
     }
 
     /**
