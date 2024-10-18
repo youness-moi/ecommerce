@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('size');
             $table->string('color');
             $table->string('material');
-            $table->enum('gender', ['Homme', 'Femme', 'Unisexe'])->default('Homme');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->enum('gender', ['Homme', 'Femme'])->default('Homme');
+            $table->foreignId('category_id')->constrained('category')->onDelete('cascade');
             $table->timestamps();
         });
     }
