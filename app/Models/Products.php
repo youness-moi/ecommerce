@@ -9,19 +9,27 @@ class Products extends Model
 {
     use HasFactory;
 
-    public function category()
-    {
-        return $this->belongsTo(Categories::class, 'category_id');
-    }
+     // Un produit appartient à une catégorie
+     public function category()
+     {
+         return $this->belongsTo(Categories::class);
+     }
 
-    public function images()
-    {
-        return $this->hasMany(ImageProducts::class, 'product_id');
-    }
+     // Un produit peut être présent dans plusieurs paniers (via cart_items)
+     public function cartItems()
+     {
+         return $this->hasMany(CartItem::class);
+     }
 
-    public function orders()
-    {
-        return $this->belongsToMany(Orders::class, 'orders_id')
-                    ->withPivot('quantity');
-    }
+     // Un produit peut être présent dans plusieurs commandes (via order_items)
+     public function orderItems()
+     {
+         return $this->hasMany(OrderItem::class);
+     }
+
+     // Un produit peut avoir plusieurs images
+     public function images()
+     {
+         return $this->hasMany(ImageProducts::class);
+     }
 }
