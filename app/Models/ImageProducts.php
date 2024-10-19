@@ -9,8 +9,9 @@ class ImageProducts extends Model
 {
     use HasFactory;
 
+    // Une image appartient à un produit
     public function product()
     {
-        return $this->belongsTo(Products::class, 'product_id');
+        return $this->belongsTo(Products::class);
     }
 }

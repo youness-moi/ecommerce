@@ -8,19 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Orders extends Model
 {
     use HasFactory;
+
+    // Une commande appartient à un utilisateur
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function products()
+    // Une commande a plusieurs items (order_items)
+    public function orderItems()
     {
-        return $this->belongsToMany(Products::class, 'products_id')
-                    ->withPivot('quantity');
+        return $this->hasMany(OrderItem::class);
     }
 
+    // Une commande a un paiement (relation un-à-un)
     public function payment()
     {
-        return $this->hasOne(Payments::class, 'order_id');
+        return $this->hasOne(Payments::class);
     }
 }

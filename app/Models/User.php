@@ -44,6 +44,12 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->hasMany(Orders::class, 'user_id');
+        return $this->hasMany(Orders::class);
+    }
+
+    // Un utilisateur peut avoir plusieurs paniers (carts)
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }

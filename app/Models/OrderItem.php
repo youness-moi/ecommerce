@@ -17,16 +17,16 @@ class OrderItem extends Model
         'price',
     ];
 
-    // Relation avec le modèle Order
-    public function order()
-    {
-        return $this->belongsTo(Orders::class, 'order_id');
-    }
+     // Un item de commande appartient à une commande
+     public function order()
+     {
+         return $this->belongsTo(Orders::class);
+     }
 
-    // Relation avec le modèle Product
-    public function product()
-    {
-        return $this->belongsTo(Products::class, 'product_id');
-    }
+     // Un item de commande est lié à un produit
+     public function product()
+     {
+         return $this->belongsTo(Products::class);
+     }
 
 }

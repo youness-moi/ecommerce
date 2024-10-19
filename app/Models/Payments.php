@@ -9,8 +9,9 @@ class Payments extends Model
 {
     use HasFactory;
 
+    // Un paiement est lié à une commande
     public function order()
     {
-        return $this->belongsTo(Orders::class, 'order_id');
+        return $this->belongsTo(Orders::class);
     }
 }
