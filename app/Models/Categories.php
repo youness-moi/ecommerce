@@ -9,6 +9,9 @@ class Categories extends Model
 {
     use HasFactory;
 
+    // Specify the table name
+    protected $table = 'category'; // Correct table name here
+
     // Une catégorie a plusieurs produits
     public function products()
     {
