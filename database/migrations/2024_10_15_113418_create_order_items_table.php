@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('products_id')->constrained('products')->onDelete('cascade');
             $table->unsignedInteger('quantity');
             $table->decimal('price', 10, 2); // Prix unitaire du produit au moment de la commande
             $table->decimal('discount', 10, 2)->default(0); // Champ pour la réduction appliquée à ce produit
-            $table->primary(['order_id', 'product_id']);
+            $table->primary(['order_id', 'products_id']);
             $table->timestamps();
         });
 

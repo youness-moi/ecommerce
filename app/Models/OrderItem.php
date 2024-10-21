@@ -12,7 +12,7 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'product_id',
+        'products_id',
         'quantity',
         'price',
     ];
@@ -26,7 +26,7 @@ class OrderItem extends Model
      // Un item de commande est lié à un produit
      public function product()
      {
-         return $this->belongsTo(Products::class);
+        return $this->belongsTo(Products::class);
      }
 
 }

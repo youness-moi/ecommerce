@@ -25,8 +25,9 @@ class Products extends Model
      // Un produit peut être présent dans plusieurs paniers (via cart_items)
      public function cartItems()
      {
-         return $this->hasMany(CartItem::class);
+        return $this->hasMany(CartItem::class, 'products_id');
      }
+
 
      // Un produit peut être présent dans plusieurs commandes (via order_items)
      public function orderItems()
