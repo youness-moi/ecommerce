@@ -9,15 +9,15 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    // Un item dans le panier appartient à un panier
+    protected $fillable = ['cart_id', 'products_id', 'quantity'];
+
     public function cart()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(Cart::class, 'cart_id');
     }
 
-    // Un item dans le panier est lié à un produit
     public function product()
     {
-        return $this->belongsTo(Products::class);
+        return $this->belongsTo(Products::class, 'products_id');
     }
 }
