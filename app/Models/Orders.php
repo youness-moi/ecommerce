@@ -26,4 +26,16 @@ class Orders extends Model
     {
         return $this->hasOne(Payments::class);
     }
+
+
+
+   public function calculateTotal(OrderItem $products)
+{
+    $total = 0;
+    foreach ($products as $productData) {
+        $total += $productData['price'] * $productData['quantity'];
+    }
+    return $total;
+}
+
 }
