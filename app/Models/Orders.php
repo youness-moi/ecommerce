@@ -9,6 +9,10 @@ class Orders extends Model
 {
     use HasFactory;
 
+
+    // Une commande appartient à un produit
+
+
     // Une commande appartient à un utilisateur
     public function user()
     {
@@ -26,4 +30,26 @@ class Orders extends Model
     {
         return $this->hasOne(Payments::class);
     }
+
+
+
+    public function calculateTotal(array $products)
+    {
+        $total = 0;
+        foreach ($products as $productData) {
+            $total += $productData['price'] * $productData['quantity'];
+        }
+        return $total;
+    }
+    // Boot the model when creating a new one
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->orderDate = $model->orderDate ?? now();
+        });
+    }
+
+
 }

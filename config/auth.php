@@ -40,6 +40,15 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+      // api sanctum
+      'api' => [
+        'driver' => 'sanctum',
+        'provider' => 'users',
+
+
+
+      ]
     ],
 
     /*
