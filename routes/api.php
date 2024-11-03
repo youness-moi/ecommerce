@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 
@@ -29,5 +30,16 @@ Route::get('user', [AuthController::class, 'getAuthenticatedUser'])->middleware(
 
 Route::apiResource('products', ProductsController::class);
 Route::apiResource('users', UserController::class);
-Route::resource('orders', OrderController::class)->middleware('auth:api');
+Route::apiResource('orders', OrderController::class)->middleware('auth:api'); // Route pour ajouter un produit au panierresource('orders', OrderController::class)->middleware('auth:api');
+
+// route pour ajouter un produit au panier
+
+Route::prefix('cart')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [CartController::class, 'index']); // Afficher le contenu du panier
+    Route::post('/add', [CartController::class, 'add']); // Ajouter un produit
+    Route::put('/update/{product}', [CartController::class, 'update']); // Modifier la quantité d'un produit
+    Route::delete('/remove/{product}', [CartController::class, 'remove']); // Supprimer un produit du panier
+    Route::post('/clear', [CartController::class, 'clear']); // Vider le panier
+});
+
 

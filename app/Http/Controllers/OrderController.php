@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Jobs\ProcessOrder;
 use App\Models\OrderItem;
 use App\Models\Orders;
 use App\Services\StockService;
@@ -33,54 +34,14 @@ class OrderController extends Controller
      * @param  OrderErrorHandler  $errorHandler
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreOrderRequest $request, StockService $stockService, OrderErrorHandler $errorHandler)
+    public function store( StoreOrderRequest $request)
     {
-        DB::beginTransaction();
+        $formFields = $request->validated();
 
-        try {
-            // Validation des données du formulaire
-            $formFields = $request->validated();
+        // Déclencher le Job pour traiter la commande
+        ProcessOrder::dispatchSync($formFields);
 
-            // Vérification du stock pour tous les produits
-            $errors = $stockService->checkStock($formFields['products']);
-            if (count($errors) > 0) {
-                return response()->json(['message' => 'Erreur de stock', 'errors' => $errors], 422);
-            }
-
-            // Création de la commande
-            $order = new Orders();
-            $order->user_id = auth()->id();
-            $order->total = $order->calculateTotal($formFields['products']);
-            $order->status = 'pending';
-            $order->save();
-
-            // Création des items de commande
-            $orderItems = collect($formFields['products'])->map(function ($productData) use ($order) {
-                return new OrderItem([
-                    'order_id' => $order->id,
-                    'products_id' => $productData['product_id'],
-                    'quantity' => $productData['quantity'],
-                    'price' => $productData['price'],
-                    'discount' => $productData['discount'] ?? 0,
-                ]);
-            });
-
-            // Sauvegarde des items de commande
-            $order->orderItems()->saveMany($orderItems);
-
-            // Mise à jour du stock
-            $stockService->updateStock($formFields['products']);
-
-            DB::commit();
-
-            return $errorHandler->successResponse();
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            return $errorHandler->handleValidationError($e);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $errorHandler->handleGeneralError($e);
-        }
+        return response()->json(['status' => 'Commande created successfully.']);
     }
 
     /**

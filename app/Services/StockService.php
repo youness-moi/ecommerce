@@ -18,6 +18,7 @@ class StockService
         foreach ($productsData as $productData) {
             $product = Products::find($productData['product_id']);
 
+
             // Vérifier que le produit existe
             if (!$product) {
                 $errors[$productData['product_id']] = "Le produit ID {$productData['product_id']} est introuvable.";
@@ -25,7 +26,9 @@ class StockService
             }
 
             // Vérifier le stock
+
             if ($product->stockQuantity < $productData['quantity']) {
+
                 $errors[$productData['product_id']] = "Le produit ID {$productData['product_id']} est en rupture de stock ou a une quantité insuffisante.";
             }
         }
@@ -42,8 +45,8 @@ class StockService
     public function updateStock(array $productsData): void
     {
         foreach ($productsData as $productData) {
-            // Lock the product row for update to prevent concurrent modifications
-            $product = Products::where('id', $productData['product_id'])->lockForUpdate()->first();
+            $product = Products::find($productData['product_id']);
+
 
             if ($product) {
                 // Ensure there's enough stock before deducting
